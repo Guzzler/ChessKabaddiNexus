@@ -1,0 +1,23 @@
+{
+  "name": "chess-kabaddi-nexus",
+  "version": "1.0.0",
+  "description": "A node backend to facilitate socket communication of chess kabaddi over the internet",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Guzzler/ChessKabaddiNexus.git"
+  },
+  "author": "Guzzler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Guzzler/ChessKabaddiNexus/issues"
+  },
+  "homepage": "https://github.com/Guzzler/ChessKabaddiNexus#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
+  }
+}
