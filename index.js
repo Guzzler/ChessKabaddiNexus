@@ -22,11 +22,9 @@ io.on('connection',function(socket){
     io.to(pointData.opponentID).emit('gameOver',{points:pointData.points,opponentID:socket.id});
   })
   socket.on('defenderMove',(defenderData)=>{
-    console.log('a');
     io.to(defenderData.opponentID).emit('defenderMove',defenderData);
   })
   socket.on('attackerMove',(attackerData)=>{
-    console.log('b');
     io.to(attackerData.opponentID).emit('attackerMove',attackerData);
   })
   socket.on('disconnect',function(){
