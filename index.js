@@ -3,7 +3,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var i =0;
 var playerIDArray =[];
-server.listen(8000,()=>{
+server.listen(3000,()=>{
   console.log("server running");
 });
 
@@ -12,12 +12,13 @@ io.on('connection',function(socket){
   playerIDArray.push(socket.id);
   i++;
   socket.emit('socketID',{id: socket.id, playerStart: i})
-  if (i==2){
-    io.to(playerIDArray[0]).emit('playerConnected',{opponentID: playerIDArray[1]});
-    socket.emit('playerConnected',{opponentID: playerIDArray[0]});
-    i=0;
-    playerIDArray=[];
+  if (i%2==0){
+    io.to(playerIDArray[i-2]).emit('playerConnected',{opponentID: playerIDArray[i-1]});
+    socket.emit('playerConnected',{opponentID: playerIDArray[i-2]});
   }
+  socket.on('startGame',(opponentData)=>{
+    io.to(opponentData.opponentID).emit('startGame',{opponentID:socket.id});
+  })
   socket.on('gameOver',(pointData)=>{
     io.to(pointData.opponentID).emit('gameOver',{points:pointData.points,opponentID:socket.id});
   })
@@ -28,6 +29,19 @@ io.on('connection',function(socket){
     io.to(attackerData.opponentID).emit('attackerMove',attackerData);
   })
   socket.on('disconnect',function(){
+    var j =0;
+    playerIDArray.forEach((playerID)=>{
+      if(socket.id == playerID){
+        if(j%2==0){
+          io.to(playerIDArray[j+1]).emit('opponentDisconnect',{opponentID:socket.id});
+        }
+        else{
+          io.to(playerIDArray[j-1]).emit('opponentDisconnect',{opponentID:socket.id});
+        }
+      }
+      j++;
+    });
+
     console.log("player disconnected");
   })
 })
