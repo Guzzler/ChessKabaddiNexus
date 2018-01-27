@@ -30,6 +30,9 @@ io.on('connection',function(socket){
   })
   socket.on('disconnect',function(){
     var j =0;
+    if(i%2==1){
+      i++;
+    }
     playerIDArray.forEach((playerID)=>{
       if(socket.id == playerID){
         if(j%2==0){
@@ -41,7 +44,6 @@ io.on('connection',function(socket){
       }
       j++;
     });
-
     console.log("player disconnected");
   })
   socket.on('playerDisconnect',function(){
