@@ -17,7 +17,8 @@ io.on('connection',function(socket){
     socket.emit('playerConnected',{opponentID: playerIDArray[i-2]});
   }
   socket.on('startGame',(opponentData)=>{
-    io.to(opponentData.opponentID).emit('startGame',{opponentID:socket.id});
+    io.to(opponentData.opponentID).emit('startGam.
+    e',{opponentID:socket.id});
   })
   socket.on('gameOver',(pointData)=>{
     io.to(pointData.opponentID).emit('gameOver',{points:pointData.points,opponentID:socket.id});
@@ -30,18 +31,22 @@ io.on('connection',function(socket){
   })
   socket.on('disconnect',function(){
     var j =0;
-    playerIDArray.forEach((playerID)=>{
-      if(socket.id == playerID){
-        if(j%2==0){
-          io.to(playerIDArray[j+1]).emit('opponentDisconnect',{opponentID:socket.id});
+    if(i%2==1){
+      i++;
+    }
+    else{
+      playerIDArray.forEach((playerID)=>{
+        if(socket.id == playerID){
+          if(j%2==0){
+            io.to(playerIDArray[j+1]).emit('opponentDisconnect',{opponentID:socket.id});
+          }
+          else{
+            io.to(playerIDArray[j-1]).emit('opponentDisconnect',{opponentID:socket.id});
+          }
         }
-        else{
-          io.to(playerIDArray[j-1]).emit('opponentDisconnect',{opponentID:socket.id});
-        }
-      }
-      j++;
-    });
-
+        j++;
+      });
+    }
     console.log("player disconnected");
   })
   socket.on('playerDisconnect',function(){
