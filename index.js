@@ -44,4 +44,20 @@ io.on('connection',function(socket){
 
     console.log("player disconnected");
   })
+  socket.on('playerDisconnect',function(){
+    var j =0;
+    playerIDArray.forEach((playerID)=>{
+      if(socket.id == playerID){
+        if(j%2==0){
+          io.to(playerIDArray[j+1]).emit('opponentDisconnect',{opponentID:socket.id});
+        }
+        else{
+          io.to(playerIDArray[j-1]).emit('opponentDisconnect',{opponentID:socket.id});
+        }
+      }
+      j++;
+    });
+
+    console.log("player disconnected");
+  })
 })
